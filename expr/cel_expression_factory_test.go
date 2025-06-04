@@ -14,36 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.seata.namingserver.exception;
 
-public class ClusterNotFoundException extends RuntimeException {
+package expr
 
-    /**
-     * cluster not found exception.
-     *
-     * @param message the message
-     */
-    public ClusterNotFoundException(String message) {
-        super(message);
-    }
+import (
+	"testing"
 
-    /**
-     * cluster not found exception.
-     *
-     * @param message the message
-     * @param cause   the cause
-     */
-    public ClusterNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	"github.com/stretchr/testify/assert"
+)
 
-    /**
-     * cluster not found exception.
-     *
-     * @param cause the cause
-     */
-    public ClusterNotFoundException(Throwable cause) {
-        super(cause);
-    }
-
+func TestCelExpressionFactory(t *testing.T) {
+	factory := NewCELExpressionFactory()
+	expression := factory.CreateExpression("'Hello' + ' World!'")
+	value := expression.Value(nil)
+	assert.Equal(t, "Hello World!", value, "Expected 'Hello World!'")
 }

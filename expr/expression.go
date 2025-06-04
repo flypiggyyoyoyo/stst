@@ -14,16 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.seata.namingserver.contants;
 
-public interface NamingConstant {
+package expr
 
-    String CONSOLE_PATTERN = "^/api/.*/console/.*";
+// expression interface
+type Expression interface {
+	// get the value of the expression
+	// elContext is the el context
+	Value(elContext any) any
 
-    int DEFAULT_REQUEST_TIMEOUT = 5000;
+	SetValue(value any, elContext any)
 
-    int DEFAULT_CONNECTION_MAX_TOTAL = 100;
-
-    int DEFAULT_CONNECTION_MAX_PER_ROUTE = 20;
-
+	// return the expression string
+	ExpressionString() string
 }

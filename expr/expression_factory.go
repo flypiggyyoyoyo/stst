@@ -14,20 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.seata.namingserver.controller;
 
-import org.apache.seata.common.result.Result;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+package expr
 
-@RestController
-@RequestMapping("/naming/v1")
-public class HealthController {
-
-    @GetMapping("/health")
-    public Result<?> healthCheck() {
-        return new Result<>();
-    }
-
+type ExpressionFactory interface {
+	CreateExpression(expression string) Expression
 }
