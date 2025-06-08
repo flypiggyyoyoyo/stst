@@ -15,28 +15,31 @@
  * limitations under the License.
  */
 
-package expr
+package db
 
 import (
-	"testing"
-
-	"github.com/stretchr/testify/assert"
+	"database/sql"
+	"os"
+	"sync"
 )
 
-func TestValueWithNil(t *testing.T) {
-	expr, err := NewCELExpression("'Hello' + ' World!'")
-	assert.NoError(t, err, "Error creating expression")
-	value := expr.Value(nil)
-	assert.Equal(t, "Hello World!", value, "Expected 'Hello World!'")
-}
+var (
+	oncePrepareDB sync.Once
+	db            *sql.DB
+)
 
-func TestValue(t *testing.T) {
-	expr, err := NewCELExpression("elContext['name'] + ' World!'")
-	assert.NoError(t, err, "Error creating expression")
-	elContext := map[string]any{
-		"name": "Hello",
-	}
+func prepareDB() {
+	oncePrepareDB.Do(func() {
+		var err error
+		db, err = sql.Open("sqlite3", ":memory:")
+		query_, err := os.ReadFile("testdata/sql/saga/sqlite_init.sql")
+		initScript := string(query_)
+		if err != nil {
+			panic(err)
+		}
+		if _, err := db.Exec(initScript); err != nil {
+			panic(err)
+		}
+	})
 
-	value := expr.Value(elContext)
-	assert.Equal(t, "Hello World!", value, "Expected 'Hello World!'")
 }
