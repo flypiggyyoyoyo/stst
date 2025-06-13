@@ -15,11 +15,9 @@
  * limitations under the License.
  */
 
-package store
+package repo
 
 import (
-	"context"
-	"github.com/seata/seata-go/pkg/saga/statemachine/engine/core"
 	"github.com/seata/seata-go/pkg/saga/statemachine/statelang"
 	"io"
 )
@@ -27,37 +25,13 @@ import (
 type StateLogRepository interface {
 	GetStateMachineInstance(stateMachineInstanceId string) (statelang.StateMachineInstance, error)
 
-	GetStateMachineInstanceByBusinessKey(businessKey string, tenantId string) (statelang.StateMachineInstance, error)
+	GetStateMachineInstanceByBusinessKey(businessKey string, tenantId string) (statelang.StateInstance, error)
 
 	GetStateMachineInstanceByParentId(parentId string) ([]statelang.StateMachineInstance, error)
 
 	GetStateInstance(stateInstanceId string, stateMachineInstanceId string) (statelang.StateInstance, error)
 
 	GetStateInstanceListByMachineInstanceId(stateMachineInstanceId string) ([]statelang.StateInstance, error)
-}
-
-type StateLogStore interface {
-	RecordStateMachineStarted(ctx context.Context, machineInstance statelang.StateMachineInstance, context core.ProcessContext) error
-
-	RecordStateMachineFinished(ctx context.Context, machineInstance statelang.StateMachineInstance, context core.ProcessContext) error
-
-	RecordStateMachineRestarted(ctx context.Context, machineInstance statelang.StateMachineInstance, context core.ProcessContext) error
-
-	RecordStateStarted(ctx context.Context, stateInstance statelang.StateInstance, context core.ProcessContext) error
-
-	RecordStateFinished(ctx context.Context, stateInstance statelang.StateInstance, context core.ProcessContext) error
-
-	GetStateMachineInstance(stateMachineInstanceId string) (statelang.StateMachineInstance, error)
-
-	GetStateMachineInstanceByBusinessKey(businessKey string, tenantId string) (statelang.StateMachineInstance, error)
-
-	GetStateMachineInstanceByParentId(parentId string) ([]statelang.StateMachineInstance, error)
-
-	GetStateInstance(stateInstanceId string, stateMachineInstanceId string) (statelang.StateInstance, error)
-
-	GetStateInstanceListByMachineInstanceId(stateMachineInstanceId string) ([]statelang.StateInstance, error)
-
-	ClearUp(context core.ProcessContext)
 }
 
 type StateMachineRepository interface {
@@ -70,12 +44,4 @@ type StateMachineRepository interface {
 	RegistryStateMachine(statelang.StateMachine) error
 
 	RegistryStateMachineByReader(reader io.Reader) error
-}
-
-type StateLangStore interface {
-	GetStateMachineById(stateMachineId string) (statelang.StateMachine, error)
-
-	GetLastVersionStateMachine(stateMachineName string, tenantId string) (statelang.StateMachine, error)
-
-	StoreStateMachine(stateMachine statelang.StateMachine) error
 }
